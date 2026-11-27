@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07142b">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<title>B2B Central Asia — поставщики и производители Центральной Азии</title>
+<meta name="description" content="B2B-платформа Центральной Азии: поставщики и производители Казахстана, Кыргызстана, Таджикистана, Туркменистана и Узбекистана.">
+</head>
+<body data-page="home">
+<header id="site-header"></header>
+<main>
+  <div class="hero orn">
+    <div class="wrap">
+      <span class="badge" data-t="hero_badge"></span>
+      <h1 data-t="hero_title"></h1>
+      <p class="sub" data-t="hero_sub"></p>
+      <form class="search" id="hero-search" role="search">
+        <input id="hero-q" type="search" data-tph="search_ph" autocomplete="off">
+        <button class="btn" type="submit" data-t="search_btn"></button>
+      </form>
+      <div class="stats">
+        <div class="stat"><b id="st-c">5</b><span data-t="stat_countries"></span></div>
+        <div class="stat"><b id="st-k">–</b><span data-t="stat_cats"></span></div>
+        <div class="stat"><b id="st-s">–</b><span data-t="stat_sup"></span></div>
+        <div class="stat"><b id="st-v">–</b><span data-t="stat_ver"></span></div>
+      </div>
+    </div>
+  </div>
+  <div class="orn-line"></div>
+
+  <section id="countries"><div class="wrap">
+    <div class="eyebrow" data-t="sec_countries"></div>
+    <h2 class="h2" data-t="sec_countries"></h2>
+    <p class="sec-sub" data-t="sec_countries_sub"></p>
+    <div class="countries" id="countries-grid"></div>
+  </div></section>
+
+  <section id="cats" style="padding-top:10px"><div class="wrap">
+    <div class="eyebrow" data-t="sec_cats"></div>
+    <h2 class="h2" data-t="sec_cats"></h2>
+    <p class="sec-sub" data-t="sec_cats_sub"></p>
+    <div class="cats" id="cats-grid"></div>
+  </div></section>
+
+  <section style="padding-top:10px"><div class="wrap">
+    <div class="sec-head">
+      <div><div class="eyebrow" data-t="nav_catalog"></div><h2 class="h2" data-t="sec_feat"></h2><p class="sec-sub" data-t="sec_feat_sub"></p></div>
+      <a href="catalog.html" data-t="see_all"></a>
+    </div>
+    <div class="grid3" id="feat-grid"></div>
+  </div></section>
+
+  <section id="how" style="padding-top:10px"><div class="wrap">
+    <div class="eyebrow" data-t="sec_how"></div>
+    <h2 class="h2" data-t="sec_how" style="margin-bottom:22px"></h2>
+    <div class="how">
+      <div class="step"><i>1</i><h3 data-t="how1_t"></h3><p data-t="how1_d"></p></div>
+      <div class="step"><i>2</i><h3 data-t="how2_t"></h3><p data-t="how2_d"></p></div>
+      <div class="step"><i>3</i><h3 data-t="how3_t"></h3><p data-t="how3_d"></p></div>
+    </div>
+  </div></section>
+
+  <section id="join" style="padding-top:10px"><div class="wrap">
+    <div class="cta orn">
+      <div><h2 data-t="cta_t"></h2><p data-t="cta_d"></p></div>
+      <a class="btn" id="join-btn" href="#" data-t="cta_btn"></a>
+    </div>
+  </div></section>
+</main>
+<footer id="site-footer"></footer>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>

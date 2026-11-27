@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#07142b">
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<title>Каталог поставщиков — B2B Central Asia</title>
+</head>
+<body data-page="catalog">
+<header id="site-header"></header>
+<main>
+  <div class="page-head orn"><div class="wrap">
+    <div class="eyebrow" data-t="nav_catalog"></div>
+    <h1 data-t="cat_title"></h1>
+    <form class="filters" id="f-form" role="search">
+      <input class="q" id="f-q" type="search" data-tph="search_ph" autocomplete="off">
+      <select id="f-country" aria-label="country"></select>
+      <select id="f-cat" aria-label="category"></select>
+      <label class="check"><input type="checkbox" id="f-ver"> <span data-t="f_verified"></span></label>
+      <button type="button" class="link-btn" id="f-reset" data-t="f_reset"></button>
+    </form>
+  </div></div>
+  <div class="wrap">
+    <div class="count" id="count" data-t="loading"></div>
+    <div class="grid3" id="results"></div>
+  </div>
+</main>
+<footer id="site-footer"></footer>
+<script src="config.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
