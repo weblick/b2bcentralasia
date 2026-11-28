@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<meta name="theme-color" content="#07142b">
+<title>Админка — B2B Central Asia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&family=Playfair+Display:wght@600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+<style>
+  .adm{padding:28px 0 60px}
+  .adm h1{font-family:var(--serif);font-size:clamp(26px,5vw,38px);margin-bottom:6px}
+  .muted{color:var(--muted);font-size:14px}
+  .box{background:rgba(255,255,255,.04);border:1px solid var(--line);border-radius:18px;padding:20px;margin-top:18px}
+  .login{max-width:420px;margin:30px auto}
+  label.f{display:block;font-size:13px;color:var(--muted);margin:12px 0 6px}
+  .inp,select.inp,textarea.inp{width:100%;background:var(--bg);color:var(--ink);border:1px solid rgba(255,255,255,.14);border-radius:10px;padding:12px;font:500 15px var(--font);outline:none}
+  textarea.inp{min-height:86px;resize:vertical}
+  .inp:focus{border-color:var(--gold)}
+  .row2{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+  @media(max-width:640px){.row2{grid-template-columns:1fr}}
+  .bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between}
+  .tools{display:grid;grid-template-columns:1fr 160px;gap:10px;margin-top:16px}
+  @media(max-width:640px){.tools{grid-template-columns:1fr}}
+  .list{display:grid;gap:10px;margin-top:14px}
+  .item{display:flex;gap:12px;align-items:center;background:var(--card);border:1px solid rgba(255,255,255,.08);border-radius:14px;padding:12px}
+  .item .s-logo{width:46px;height:46px;font-size:15px;border-radius:12px}
+  .item .info{flex:1;min-width:0}
+  .item b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .item small{color:var(--muted)}
+  .st{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;text-transform:uppercase;letter-spacing:.5px}
+  .st.approved{background:rgba(47,174,102,.18);color:#6fe0a0}
+  .st.pending{background:rgba(201,162,74,.18);color:var(--gold2)}
+  .st.hidden{background:rgba(255,255,255,.08);color:#9fb0cc}
+  .btn.sm{padding:9px 14px;font-size:13px;border-radius:10px}
+  .btn.red{background:transparent;color:#ff8f8f;border:1px solid #a54848}
+  .msg{margin-top:12px;font-size:14px;padding:10px 12px;border-radius:10px;display:none}
+  .msg.err{display:block;background:rgba(232,17,45,.12);color:#ffb3b3;border:1px solid rgba(232,17,45,.35)}
+  .msg.ok{display:block;background:rgba(47,174,102,.12);color:#9ff0c2;border:1px solid rgba(47,174,102,.35)}
+  .checks{display:flex;flex-wrap:wrap;gap:18px;margin-top:14px}
+  .logo-prev{display:flex;gap:12px;align-items:center;margin-top:6px}
+  .logo-prev img{width:64px;height:64px;object-fit:contain;background:#fff;border-radius:12px}
+  .actions{display:flex;flex-wrap:wrap;gap:10px;margin-top:20px}
+  .sec-t{font-size:12px;letter-spacing:2.5px;text-transform:uppercase;color:var(--gold);margin-top:22px;font-weight:700}
+  [hidden]{display:none!important}
+</style>
+</head>
+<body>
+<header id="site-header"><div class="wrap head-row">
+  <a class="logo" href="index.html"><svg viewBox="0 0 40 40" aria-hidden="true"><g fill="none" stroke="currentColor" stroke-width="2"><path d="M20 3l4.9 7.3 8.6-1.8-1.8 8.6L39 20l-7.3 4.9 1.8 8.6-8.6-1.8L20 37l-4.9-7.3-8.6 1.8 1.8-8.6L1 20l7.3-4.9-1.8-8.6 8.6 1.8z"/><circle cx="20" cy="20" r="6.5"/></g></svg><span>B2B <b>Central Asia</b></span></a>
+  <span class="muted" style="margin-left:auto">Админка</span>
+  <button class="btn ghost sm" id="logout" hidden>Выйти</button>
+</div></header>
+
+<main class="wrap adm">
+
+  <!-- ВХОД -->
+  <section id="v-login" class="box login" hidden>
+    <h1>Вход</h1>
+    <p class="muted">Только для администраторов платформы.</p>
+    <form id="f-login">
+      <label class="f">E-mail</label><input class="inp" id="l-email" type="email" autocomplete="username" required>
+      <label class="f">Пароль</label><input class="inp" id="l-pass" type="password" autocomplete="current-password" required>
+      <div class="actions"><button class="btn" type="submit" style="width:100%">Войти</button></div>
+    </form>
+    <div class="msg" id="m-login"></div>
+  </section>
+
+  <!-- СПИСОК -->
+  <section id="v-list" hidden>
+    <div class="bar">
+      <div><h1>Поставщики</h1><p class="muted" id="cnt"></p></div>
+      <button class="btn" id="add">+ Добавить</button>
+    </div>
+    <div class="tools">
+      <input class="inp" id="q" type="search" placeholder="Поиск по названию или городу">
+      <select class="inp" id="fst">
+        <option value="">Все статусы</option>
+        <option value="approved">Опубликован</option>
+        <option value="pending">На проверке</option>
+        <option value="hidden">Скрыт</option>
+      </select>
+    </div>
+    <div class="msg" id="m-list"></div>
+    <div class="list" id="list"></div>
+    <div class="box" id="test-box" hidden>
+      <b>Тестовые компании</b>
+      <p class="muted" style="margin-top:4px">Когда добавишь настоящих поставщиков, тестовые можно удалить одной кнопкой.</p>
+      <div class="actions"><button class="btn red sm" id="del-test">Удалить все тестовые</button></div>
+    </div>
+  </section>
+
+  <!-- ФОРМА -->
+  <section id="v-form" hidden>
+    <a class="back" href="#" id="back">← К списку</a>
+    <h1 id="form-title">Новый поставщик</h1>
+    <form id="f-sup" class="box">
+      <div class="sec-t" style="margin-top:0">Основное</div>
+      <label class="f">Название компании *</label><input class="inp" id="s-name" required>
+      <label class="f">Адрес страницы (латиница, без пробелов) *</label><input class="inp" id="s-slug" required pattern="[a-z0-9\-]+" placeholder="например: almaty-pack">
+      <div class="row2">
+        <div><label class="f">Страна *</label><select class="inp" id="s-country" required></select></div>
+        <div><label class="f">Город</label><input class="inp" id="s-city"></div>
+      </div>
+      <label class="f">Отрасль</label><select class="inp" id="s-cat"></select>
+
+      <div class="sec-t">Логотип</div>
+      <div class="logo-prev"><img id="s-logo-img" alt="" hidden><input class="inp" id="s-logo" type="file" accept="image/png,image/jpeg,image/webp,image/svg+xml"></div>
+      <label class="checks" style="margin-top:8px"><span><input type="checkbox" id="s-logo-del"> удалить логотип</span></label>
+
+      <div class="sec-t">Описание</div>
+      <label class="f">На русском</label><textarea class="inp" id="s-d-ru"></textarea>
+      <label class="f">English</label><textarea class="inp" id="s-d-en"></textarea>
+      <label class="f">中文</label><textarea class="inp" id="s-d-zh"></textarea>
+
+      <div class="sec-t">Контакты</div>
+      <div class="row2">
+        <div><label class="f">Телефон</label><input class="inp" id="s-phone" type="tel" placeholder="+998 90 123 45 67"></div>
+        <div><label class="f">E-mail</label><input class="inp" id="s-email" type="email"></div>
+        <div><label class="f">Telegram (без @)</label><input class="inp" id="s-tg" placeholder="username"></div>
+        <div><label class="f">WhatsApp (номер)</label><input class="inp" id="s-wa" type="tel"></div>
+        <div><label class="f">Instagram (без @)</label><input class="inp" id="s-ig"></div>
+        <div><label class="f">Сайт</label><input class="inp" id="s-web" type="url" placeholder="https://"></div>
+      </div>
+
+      <div class="sec-t">Публикация</div>
+      <div class="row2">
+        <div><label class="f">Статус</label>
+          <select class="inp" id="s-status">
+            <option value="approved">Опубликован (виден всем)</option>
+            <option value="pending">На проверке (скрыт)</option>
+            <option value="hidden">Скрыт</option>
+          </select></div>
+        <div class="checks" style="align-items:flex-end">
+          <label><input type="checkbox" id="s-ver"> ✓ Проверенный поставщик</label>
+          <label><input type="checkbox" id="s-test"> тестовая компания</label>
+        </div>
+      </div>
+
+      <div class="msg" id="m-form"></div>
+      <div class="actions">
+        <button class="btn" type="submit" id="save">Сохранить</button>
+        <a class="btn ghost" id="view" target="_blank" hidden>Открыть на сайте</a>
+        <button class="btn red" type="button" id="del" hidden>Удалить</button>
+      </div>
+    </form>
+  </section>
+
+</main>
+
+<script src="config.js"></script>
+<script>
+(function () {
+  "use strict";
+  var C = window.CONFIG || {};
+  var URL_ = String(C.SUPABASE_URL || "").replace(/\/+$/, ""), KEY = C.SUPABASE_KEY || "";
+  var $ = function (id) { return document.getElementById(id); };
+  var FLAG = { KZ: "🇰🇿", KG: "🇰🇬", TJ: "🇹🇯", TM: "🇹🇲", UZ: "🇺🇿" };
+  var COLOR = { KZ: "#00a7c8", KG: "#e8112d", TJ: "#1e8f3a", TM: "#2fae66", UZ: "#1e88c8" };
+  var ST = { approved: "Опубликован", pending: "На проверке", hidden: "Скрыт" };
+  var S = null, countries = [], cats = [], sups = [], cur = null;
+
+  function esc(s) { return String(s == null ? "" : s).replace(/[&<>"']/g, function (c) { return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]; }); }
+  function show(v) { ["v-login", "v-list", "v-form"].forEach(function (x) { $(x).hidden = x !== v; }); $("logout").hidden = v === "v-login"; scrollTo(0, 0); }
+  function msg(id, text, ok) { var m = $(id); m.className = "msg " + (text ? (ok ? "ok" : "err") : ""); m.textContent = text || ""; }
+  function errText(e) {
+    var t = (e && e.message) || String(e);
+    if (/23505|duplicate/i.test(t)) return "Такой адрес страницы уже занят. Поменяй его.";
+    if (/Invalid login|invalid_grant|invalid_credentials/i.test(t)) return "Неверный e-mail или пароль.";
+    if (/Failed to fetch|NetworkError/i.test(t)) return "Нет связи с сервером. Проверь интернет.";
+    if (/42501|row-level security|permission/i.test(t)) return "Нет прав. Этот аккаунт не добавлен в админы.";
+    return "Ошибка: " + t;
+  }
+
+  // ---------- СЕССИЯ ----------
+  function saveS(s) { S = s; try { s ? localStorage.setItem("b2b_admin", JSON.stringify(s)) : localStorage.removeItem("b2b_admin"); } catch (e) {} }
+  function loadS() { try { return JSON.parse(localStorage.getItem("b2b_admin") || "null"); } catch (e) { return null; } }
+  function auth(grant, body) {
+    return fetch(URL_ + "/auth/v1/token?grant_type=" + grant, { method: "POST", headers: { apikey: KEY, "Content-Type": "application/json" }, body: JSON.stringify(body) })
+      .then(function (r) { return r.json().then(function (j) { if (!r.ok) throw new Error(j.error_description || j.msg || j.error || ("HTTP " + r.status)); return j; }); })
+      .then(function (j) { var s = { at: j.access_token, rt: j.refresh_token, exp: Date.now() + (j.expires_in || 3600) * 1000, email: j.user && j.user.email }; saveS(s); return s; });
+  }
+  function token() {
+    if (!S) return Promise.reject(new Error("no session"));
+    if (S.exp - Date.now() > 60000) return Promise.resolve(S.at);
+    return auth("refresh_token", { refresh_token: S.rt }).then(function (s) { return s.at; });
+  }
+  function api(path, opt) {
+    opt = opt || {};
+    return token().then(function (t) {
+      var h = { apikey: KEY, Authorization: "Bearer " + t };
+      if (opt.body) h["Content-Type"] = "application/json";
+      if (opt.prefer) h.Prefer = opt.prefer;
+      return fetch(URL_ + "/rest/v1/" + path, { method: opt.method || "GET", headers: h, body: opt.body ? JSON.stringify(opt.body) : undefined });
+    }).then(function (r) {
+      return r.text().then(function (t) {
+        var j = t ? JSON.parse(t) : null;
+        if (!r.ok) throw new Error((j && (j.code ? j.code + " " : "") + (j.message || j.msg)) || ("HTTP " + r.status));
+        return j;
+      });
+    });
+  }
+  function upload(file, slug) {
+    var ext = (file.name.split(".").pop() || "png").toLowerCase().replace(/[^a-z0-9]/g, "") || "png";
+    var path = slug + "-" + Date.now() + "." + ext;
+    return token().then(function (t) {
+      return fetch(URL_ + "/storage/v1/object/logos/" + path, { method: "POST", headers: { apikey: KEY, Authorization: "Bearer " + t, "Content-Type": file.type || "image/png", "x-upsert": "true" }, body: file });
+    }).then(function (r) {
+      if (!r.ok) return r.text().then(function (t) { throw new Error("Логотип не загрузился: " + t); });
+      return URL_ + "/storage/v1/object/public/logos/" + path;
+    });
+  }
+
+  // ---------- ВХОД ----------
+  $("f-login").onsubmit = function (e) {
+    e.preventDefault(); msg("m-login", "");
+    auth("password", { email: $("l-email").value.trim(), password: $("l-pass").value })
+      .then(start).catch(function (err) { msg("m-login", errText(err)); });
+  };
+  $("logout").onclick = function () { saveS(null); show("v-login"); };
+
+  function start() {
+    return api("admins?select=user_id").then(function (rows) {
+      if (!rows || !rows.length) { saveS(null); show("v-login"); msg("m-login", "Вход выполнен, но этот аккаунт не добавлен в админы. Выполни SQL из инструкции."); return; }
+      return Promise.all([
+        api("countries?select=code,name&order=sort"),
+        api("categories?select=id,slug,name,icon&order=sort")
+      ]).then(function (r) {
+        countries = r[0]; cats = r[1];
+        $("s-country").innerHTML = countries.map(function (c) { return '<option value="' + c.code + '">' + FLAG[c.code] + " " + esc(c.name.ru) + "</option>"; }).join("");
+        $("s-cat").innerHTML = '<option value="">— не выбрана —</option>' + cats.map(function (k) { return '<option value="' + k.id + '">' + esc(k.icon || "") + " " + esc(k.name.ru) + "</option>"; }).join("");
+        return loadList();
+      });
+    }).catch(function (err) { saveS(null); show("v-login"); msg("m-login", errText(err)); });
+  }
+
+  // ---------- СПИСОК ----------
+  function loadList() {
+    return api("suppliers?select=*&order=created_at.desc").then(function (rows) { sups = rows; renderList(); show("v-list"); })
+      .catch(function (err) { msg("m-list", errText(err)); });
+  }
+  function initials(n) { return String(n || "?").split(/\s+/).filter(Boolean).slice(0, 2).map(function (w) { return w[0]; }).join("").toUpperCase(); }
+  function renderList() {
+    var q = $("q").value.trim().toLowerCase(), st = $("fst").value;
+    var rows = sups.filter(function (s) {
+      if (st && s.status !== st) return false;
+      return !q || (s.name + " " + (s.city || "")).toLowerCase().indexOf(q) >= 0;
+    });
+    $("cnt").textContent = "Всего: " + sups.length + " · показано: " + rows.length;
+    $("list").innerHTML = rows.map(function (s) {
+      var logo = s.logo_url ? '<div class="s-logo"><img src="' + esc(s.logo_url) + '" alt=""></div>' : '<div class="s-logo" style="--c:' + (COLOR[s.country_code] || "#c9a24a") + '">' + esc(initials(s.name)) + "</div>";
+      return '<div class="item">' + logo +
+        '<div class="info"><b>' + esc(s.name) + '</b><small>' + (FLAG[s.country_code] || "") + " " + esc(s.city || "") + (s.is_verified ? " · ✓" : "") + (s.is_test ? " · тест" : "") + "</small><br>" +
+        '<span class="st ' + s.status + '">' + ST[s.status] + "</span></div>" +
+        '<button class="btn ghost sm" data-id="' + s.id + '">Изменить</button></div>';
+    }).join("") || '<div class="empty">Ничего не найдено</div>';
+    $("list").querySelectorAll("[data-id]").forEach(function (b) { b.onclick = function () { openForm(sups.filter(function (s) { return s.id === b.dataset.id; })[0]); }; });
+    $("test-box").hidden = !sups.some(function (s) { return s.is_test; });
+  }
+  $("q").oninput = renderList; $("fst").onchange = renderList;
+  $("add").onclick = function () { openForm(null); };
+  $("back").onclick = function (e) { e.preventDefault(); show("v-list"); };
+
+  $("del-test").onclick = function () {
+    var n = sups.filter(function (s) { return s.is_test; }).length;
+    if (!window.confirm("Удалить " + n + " тестовых компаний? Это нельзя отменить.")) return;
+    api("suppliers?is_test=eq.true", { method: "DELETE" }).then(loadList).then(function () { msg("m-list", "Тестовые компании удалены.", true); })
+      .catch(function (err) { msg("m-list", errText(err)); });
+  };
+
+  // ---------- ФОРМА ----------
+  function slugify(s) {
+    var map = { а:"a",б:"b",в:"v",г:"g",д:"d",е:"e",ё:"e",ж:"zh",з:"z",и:"i",й:"y",к:"k",л:"l",м:"m",н:"n",о:"o",п:"p",р:"r",с:"s",т:"t",у:"u",ф:"f",х:"h",ц:"ts",ч:"ch",ш:"sh",щ:"sch",ъ:"",ы:"y",ь:"",э:"e",ю:"yu",я:"ya",ў:"o",қ:"q",ғ:"g",ҳ:"h",ә:"a",ө:"o",ү:"u",ұ:"u",ң:"n",і:"i" };
+    return String(s || "").toLowerCase().split("").map(function (c) { return map[c] != null ? map[c] : c; }).join("")
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 60);
+  }
+  var slugTouched = false;
+  $("s-name").oninput = function () { if (!slugTouched) $("s-slug").value = slugify($("s-name").value); };
+  $("s-slug").oninput = function () { slugTouched = true; };
+
+  function openForm(s) {
+    cur = s; slugTouched = !!s; msg("m-form", "");
+    var d = (s && s.description) || {};
+    $("form-title").textContent = s ? s.name : "Новый поставщик";
+    $("s-name").value = s ? s.name : ""; $("s-slug").value = s ? s.slug : "";
+    $("s-country").value = s ? s.country_code : "UZ"; $("s-city").value = s ? s.city || "" : "";
+    $("s-cat").value = s && s.category_id ? String(s.category_id) : "";
+    $("s-d-ru").value = d.ru || ""; $("s-d-en").value = d.en || ""; $("s-d-zh").value = d.zh || "";
+    $("s-phone").value = s ? s.phone || "" : ""; $("s-email").value = s ? s.email || "" : "";
+    $("s-tg").value = s ? s.telegram || "" : ""; $("s-wa").value = s ? s.whatsapp || "" : "";
+    $("s-ig").value = s ? s.instagram || "" : ""; $("s-web").value = s ? s.website || "" : "";
+    $("s-status").value = s ? s.status : "approved";
+    $("s-ver").checked = !!(s && s.is_verified); $("s-test").checked = !!(s && s.is_test);
+    $("s-logo").value = ""; $("s-logo-del").checked = false;
+    $("s-logo-img").hidden = !(s && s.logo_url); if (s && s.logo_url) $("s-logo-img").src = s.logo_url;
+    $("del").hidden = !s; $("view").hidden = !s; if (s) $("view").href = "supplier.html?s=" + encodeURIComponent(s.slug);
+    show("v-form");
+  }
+
+  function clean(v) { v = String(v || "").trim(); return v || null; }
+  $("f-sup").onsubmit = function (e) {
+    e.preventDefault(); msg("m-form", "");
+    var slug = slugify($("s-slug").value) || slugify($("s-name").value);
+    if (!slug) { msg("m-form", "Заполни адрес страницы латиницей."); return; }
+    $("s-slug").value = slug;
+    var desc = {};
+    ["ru", "en", "zh"].forEach(function (l) { var v = $("s-d-" + l).value.trim(); if (v) desc[l] = v; });
+    var row = {
+      name: $("s-name").value.trim(), slug: slug, country_code: $("s-country").value, city: clean($("s-city").value),
+      category_id: $("s-cat").value ? Number($("s-cat").value) : null, description: desc,
+      phone: clean($("s-phone").value), email: clean($("s-email").value),
+      telegram: clean($("s-tg").value.replace(/^@/, "")), whatsapp: clean($("s-wa").value),
+      instagram: clean($("s-ig").value.replace(/^@/, "")), website: clean($("s-web").value),
+      status: $("s-status").value, is_verified: $("s-ver").checked, is_test: $("s-test").checked
+    };
+    var btn = $("save"); btn.disabled = true; btn.textContent = "Сохраняю…";
+    var file = $("s-logo").files[0];
+    var step = file ? upload(file, slug).then(function (u) { row.logo_url = u; }) : Promise.resolve();
+    if (!file && $("s-logo-del").checked) row.logo_url = null;
+    step.then(function () {
+      return cur
+        ? api("suppliers?id=eq." + cur.id, { method: "PATCH", body: row, prefer: "return=representation" })
+        : api("suppliers", { method: "POST", body: row, prefer: "return=representation" });
+    }).then(function (r) {
+      return loadList().then(function () { openForm(r && r[0]); msg("m-form", "Сохранено ✓", true); });
+    }).catch(function (err) { msg("m-form", errText(err)); })
+      .then(function () { btn.disabled = false; btn.textContent = "Сохранить"; });
+  };
+
+  $("del").onclick = function () {
+    if (!cur || !window.confirm("Удалить «" + cur.name + "»? Это нельзя отменить.")) return;
+    api("suppliers?id=eq." + cur.id, { method: "DELETE" }).then(loadList).then(function () { msg("m-list", "Удалено.", true); })
+      .catch(function (err) { msg("m-form", errText(err)); });
+  };
+
+  // ---------- СТАРТ ----------
+  if (!URL_ || !KEY) { show("v-login"); msg("m-login", "В config.js не заполнены SUPABASE_URL и SUPABASE_KEY."); return; }
+  S = loadS();
+  if (S) start(); else show("v-login");
+})();
+</script>
+</body>
+</html>

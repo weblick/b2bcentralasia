@@ -42,7 +42,8 @@ img{max-width:100%;display:block}
   .langs{margin-left:auto}
   .logo span{font-size:14px}
 }
-@media(max-width:380px){.logo span{display:none}}
+@media(max-width:420px){.head-row{gap:8px}.logo{gap:7px}.logo svg{width:28px;height:28px}.logo span{font-size:12px}.langs button{padding:6px 7px;font-size:11px}}
+@media(max-width:330px){.logo span{display:none}}
 
 /* кнопки */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;background:linear-gradient(180deg,var(--gold2),var(--gold));color:#0a1730;font:700 15px var(--font);border:0;border-radius:12px;padding:14px 22px;cursor:pointer;transition:transform .15s,filter .2s}
